@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12"> <!-- Increased width of the main content area -->
+                <h1>Post</h1>
+                <ul class="post-list list-group">
+                    {% for post in object_list %}
+                        <li class="post-item list-group-item">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <h5 class="mb-1"><a href="{% url 'article-detail' post.pk %}">{{ post.title }}</a></h5>
+                                <small>{{ post.post_date }} - {{ post.post_time }}</small>
+                            </div>
+                            <p class="mb-1">{{ post.snippet }}</p>
+                            <small>{{ post.author.first_name }} {{ post.author.last_name }}</small>
+                            {% if user.is_authenticated %}
+                                {% if user.id == post.author.id %}
+                                    <div class="float-right">
+                                        <a href="{% url 'update_post' post.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{% url 'delete_post' post.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="Pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                            <a class="page-link" href="{% if page_obj.has_previous %}?page=1{% endif %}" aria-label="First">&laquo; First</a>
+                        </li>
+                        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                            <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% endif %}" aria-label="Previous">Previous</a>
+                        </li>
+                        <li class="page-item active"><span class="page-link">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span></li>
+                        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% endif %}" aria-label="Next">Next</a>
+                        </li>
+                        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                            <a class="page-link" href="{% if page_obj.has_next %}?page={{ paginator.num_pages }}{% endif %}" aria-label="Last">Last &raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+            <div class="col-md-3"> <!-- Reduced width of the sidebar -->
+                <!-- Add any additional content or widgets here -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">User Profile</h1>
+
+    <style>
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+        }
+        .card-img {
+            border-radius: 15px 0 0 15px;
+            object-fit: cover;
+            height: 100%;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .card-title {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .social-links a {
+            color: #007bff;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+        .card-text {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+
+    <div class="card mb-5">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                {% if page_user.profile_pic %}
+                    <img src="{{ page_user.profile_pic.url }}" class="card-img" alt="{{ page_user.user.get_full_name }}">
+                {% else %}
+                    <img src="{% static 'theblog/images/default_profile_picture.jpg' %}" class="card-img" alt="Default Profile Picture">
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ page_user.user.get_full_name }}</h5>
+                    <p class="social-links">
+                        {% if page_user.fb_url %}
+                            <a href="{{ page_user.fb_url }}" target="_blank">Facebook</a>
+                        {% endif %}
+                        {% if page_user.twitter_url %}
+                            <a href="{{ page_user.twitter_url }}" target="_blank">Twitter</a>
+                        {% endif %}
+                        {% if page_user.instagram_url %}
+                            <a href="{{ page_user.instagram_url }}" target="_blank">Instagram</a>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ page_user.bio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+{% endblock %}
